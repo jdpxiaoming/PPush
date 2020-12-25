@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void startLive(View view) {
 
+        mLivePusher.startLive("");
     }
 
     /**

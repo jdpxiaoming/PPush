@@ -33,7 +33,7 @@ public class VideoChannel implements Camera.PreviewCallback, CameraHelper.OnChan
     public void onPreviewFrame(byte[] data, Camera camera) {
         Log.i(TAG, "onPreviewFrame: ");
         if (isLiving) {
-//            livePusher.native_pushVideo(data);
+            livePusher.native_pushVideo(data);
         }
 
     }
@@ -41,7 +41,7 @@ public class VideoChannel implements Camera.PreviewCallback, CameraHelper.OnChan
     @Override
     public void onChanged(int w, int h) {
         //
-//        livePusher.native_setVideoEncInfo(w, h, mFps, mBitrate);
+        livePusher.native_setVideoEncInfo(w, h, mFps, mBitrate);
     }
 
     /**

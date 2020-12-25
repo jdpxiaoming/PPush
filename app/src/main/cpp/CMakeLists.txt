@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # 设置编译时的源文件查找目录.
 file(GLOB SOURCE
         ${CMAKE_SOURCE_DIR}/*.cpp
+        ${CMAKE_SOURCE_DIR}/VideoChannel.cpp
         ${CMAKE_SOURCE_DIR}/safe_queue.h
         ${CMAKE_SOURCE_DIR}/macro.h
         )
@@ -9,13 +10,11 @@ file(GLOB SOURCE
 add_library(
         native-lib
         SHARED
-        ${SOURCE})
+        ${SOURCE}
+        )
 
 # 引入子目录
 add_subdirectory(librtmp)
-
-
-
 
 find_library(log-lib
               log )

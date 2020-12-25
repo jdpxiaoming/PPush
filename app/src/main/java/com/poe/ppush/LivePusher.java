@@ -30,7 +30,7 @@ public class LivePusher {
      * @param cameraId the camera id .  0:background 1:foreground .
      */
     public LivePusher(Activity activity, int width, int height, int bitrate, int fps, int cameraId) {
-//        native_init();
+        native_init();
         Log.i(TAG,stringFromJNI());
         videoChannel = new VideoChannel(this, activity, width, height, bitrate, fps, cameraId);
         audioChannel = new AudioChannel(this);
@@ -45,13 +45,13 @@ public class LivePusher {
     }
 
     public void startLive(String path) {
-//        native_start(path);
+        native_start(path);
         videoChannel.startLive();
     }
-    /*public native void native_init();
+    public native void native_init();
     public native void native_setVideoEncInfo(int width, int height, int fps, int bitrate);
     public native void native_start(String path);
-    public native void native_pushVideo(byte[] data);*/
+    public native void native_pushVideo(byte[] data);
 
     public native String stringFromJNI();
 }
