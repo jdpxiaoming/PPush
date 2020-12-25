@@ -54,4 +54,6 @@ public class LivePusher {
     public native void native_pushVideo(byte[] data);
 
     public native String stringFromJNI();
+
+    public native void native_pushAudio(byte[] buffer);
 }

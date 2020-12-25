@@ -208,4 +208,20 @@ Java_com_poe_ppush_LivePusher_native_1pushVideo(JNIEnv *env, jobject thiz, jbyte
 
 
      env->ReleaseByteArrayElements(data_,data, 0 );
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_poe_ppush_LivePusher_native_1pushAudio(JNIEnv *env, jobject thiz, jbyteArray buffer_) {
+    // pcm -> aac
+    // FAAC
+
+    //获取推流的数据包.
+    jbyte* data =  env->GetByteArrayElements(buffer_ , NULL);
+
+
+    //进行数据处理audioChannel.
+
+
+
+    env->ReleaseByteArrayElements(buffer_,data, 0 );
+
 }
