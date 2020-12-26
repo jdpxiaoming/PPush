@@ -27,4 +27,5 @@ target_link_libraries(
                        rtmp
                        ${log-lib}
                         x264
+                        faac
                       )

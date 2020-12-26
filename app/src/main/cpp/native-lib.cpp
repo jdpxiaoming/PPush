@@ -45,9 +45,8 @@ void releasePackets(RTMPPacket*& packet){
  * @return
  */
 void *start(void *args){
-
     char *url = static_cast<char *>(args);
-
+    LOGE("开始推流 %s failed!",url);
      //开启RTMP网络连接
      RTMP *rtmp = 0;
      rtmp = RTMP_Alloc();
@@ -92,6 +91,8 @@ void *start(void *args){
     start_time = RTMP_GetTime();
     //    准备推流
     readyPushing = 1;
+    //打开工作状态.
+    packets.setWork(1);
 
     RTMPPacket *packet = 0;
 
@@ -198,14 +199,10 @@ Java_com_poe_ppush_LivePusher_native_1pushVideo(JNIEnv *env, jobject thiz, jbyte
      if(!videoChannel || !readyPushing){
          return;
      }
-
      //获取推流的数据包.
     jbyte* data =  env->GetByteArrayElements(data_ , NULL);
-
-
      //进行数据处理videoChannel.
      videoChannel->encodeData(data);
-
 
      env->ReleaseByteArrayElements(data_,data, 0 );
 }extern "C"

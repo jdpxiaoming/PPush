@@ -144,7 +144,7 @@ void VideoChannel::encodeData(int8_t *data) {
         //u数据 从传入的data数据ysize之后开始取值.
         *(pic_in->img.plane[1]+i) = *(data + ySize+ i*2 +1);
         //v数据 下一行
-        *(pic_in->img.plane[2]+i) = *(data + ySize+i*2)
+        *(pic_in->img.plane[2]+i) = *(data + ySize+i*2);
 
     }
 
@@ -173,8 +173,8 @@ void VideoChannel::encodeData(int8_t *data) {
             //关键帧带有的信息头部. 
             sendSpsPps(sps , pps , sps_length , pps_length);
         }else{
-            //发送非关键帧
-            sendFrame()
+            //发送非关键帧(关键帧和非关键帧一起发送.)
+            sendFrame(pp_nal[i].i_type , pp_nal[i].p_payload , pp_nal[i].i_payload);
         }
     }
 }
@@ -192,6 +192,7 @@ void VideoChannel::sendSpsPps(uint8_t *sps, uint8_t *pps, int sps_length, int pp
     //sps,pps -> packet.
     int bodySize = 13 + sps_length +3 + pps_length;
     RTMPPacket *packet = new RTMPPacket();
+    RTMPPacket_Alloc(packet , bodySize);
 
     //开始组装RTMP数据格式
     int i = 0;
