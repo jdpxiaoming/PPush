@@ -6,11 +6,13 @@
 #include "VideoChannel.h"
 #include "macro.h"
 #include "safe_queue.h"
+#include "AudioChannel.h"
 
 //防止用户重复点击标志位.
 int isStart = 0;
 int readyPushing = 0;//准备开始推流。
 VideoChannel* videoChannel;
+AudioChannel* audioChannel;
 pthread_t *pid;//开启推流线程id。
 uint32_t start_time;//音视频同步需要的记录一个开始时间
 SafeQueue<RTMPPacket *>  packets;//缓存数据队列,等待推送的数据集合.
@@ -155,6 +157,8 @@ JNIEXPORT void JNICALL
 Java_com_poe_ppush_LivePusher_native_1init(JNIEnv *env, jobject thiz) {
     videoChannel = new VideoChannel;
     videoChannel->setVideoCallback(callback);
+    audioChannel = new AudioChannel;
+    audioChannel->setAudioCallback(callback);
 
 }extern "C"
 JNIEXPORT void JNICALL
@@ -214,11 +218,30 @@ Java_com_poe_ppush_LivePusher_native_1pushAudio(JNIEnv *env, jobject thiz, jbyte
     //获取推流的数据包.
     jbyte* data =  env->GetByteArrayElements(buffer_ , NULL);
 
-
     //进行数据处理audioChannel.
+    if(!audioChannel || !readyPushing ){
+        LOGE("audio channel is null!");
+        return;
+    }
 
-
+    audioChannel->encodeData(data);
 
     env->ReleaseByteArrayElements(buffer_,data, 0 );
 
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_poe_ppush_LivePusher_native_1setAudioEncInfo(JNIEnv *env, jobject thiz, jint sample_,
+                                                      jint channels) {
+    if(audioChannel){
+        audioChannel->setAudioEncInfo(sample_ , channels);
+    }
+}extern "C"
+JNIEXPORT jint JNICALL
+Java_com_poe_ppush_LivePusher_getInputSamples(JNIEnv *env, jobject thiz) {
+
+    if(audioChannel){
+        return audioChannel->getInputSamples();
+    }
+
+    return -1;
 }

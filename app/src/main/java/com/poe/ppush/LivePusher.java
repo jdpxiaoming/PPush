@@ -16,6 +16,8 @@ public class LivePusher {
 
     private AudioChannel audioChannel;
     private VideoChannel videoChannel;
+
+
     static {
         System.loadLibrary("native-lib");
     }
@@ -47,6 +49,7 @@ public class LivePusher {
     public void startLive(String path) {
         native_start(path);
         videoChannel.startLive();
+        audioChannel.startLive();
     }
     public native void native_init();
     public native void native_setVideoEncInfo(int width, int height, int fps, int bitrate);
@@ -56,4 +59,7 @@ public class LivePusher {
     public native String stringFromJNI();
 
     public native void native_pushAudio(byte[] buffer);
+    //设置音频数据.
+    public native void native_setAudioEncInfo(int sample_ , int channels);
+    public native int getInputSamples() ;
 }

@@ -18,6 +18,8 @@ public class AudioChannel {
     private int minBufferSize;//最小的缓存数组.
     private ExecutorService mExecutorService;
     private boolean isLiving = false;//tag是否正在直播音频.
+    private int inputSamples ;//编码器返回的最小缓冲区.
+
 
     public AudioChannel(LivePusher livePusher) {
         mLivePusher = livePusher;
@@ -31,6 +33,11 @@ public class AudioChannel {
             //单通道 .
             mChannelConfigs = AudioFormat.CHANNEL_IN_MONO;
         }
+        //初始化音频编码器
+        mLivePusher.native_setAudioEncInfo(44100 , mChannels);
+
+        //16位 2个字节.
+        inputSamples = mLivePusher.getInputSamples();
 
         //minBufferSize,因为是双通道说以*2.
         minBufferSize = AudioRecord.getMinBufferSize(44100,
@@ -39,7 +46,7 @@ public class AudioChannel {
                 44100,
                 mChannelConfigs,
                 AudioFormat.ENCODING_PCM_16BIT,
-                minBufferSize
+                minBufferSize>inputSamples?inputSamples:minBufferSize
                 );
 
     }

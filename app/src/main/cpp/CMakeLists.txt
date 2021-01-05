@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.4.1)
 file(GLOB SOURCE
         ${CMAKE_SOURCE_DIR}/*.cpp
         ${CMAKE_SOURCE_DIR}/VideoChannel.cpp
+        ${CMAKE_SOURCE_DIR}/AudioChannel.cpp
         ${CMAKE_SOURCE_DIR}/safe_queue.h
         ${CMAKE_SOURCE_DIR}/macro.h
         )
