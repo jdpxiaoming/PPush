@@ -17,5 +17,4 @@ x264+rtmpdump完成安卓端的直播推流
 
 
 # h264头部编码信息SPS+PPS
-
-[!pic](https://github.com/jdpxiaoming/PPush/blob/main/docs/h264_sps.png)
+![](https://github.com/jdpxiaoming/PPush/blob/main/docs/h264_sps.png)
