@@ -13,7 +13,7 @@ int isStart = 0;
 int readyPushing = 0;//准备开始推流。
 VideoChannel* videoChannel;
 AudioChannel* audioChannel;
-pthread_t *pid;//开启推流线程id。
+pthread_t pid;//开启推流线程id。
 uint32_t start_time;//音视频同步需要的记录一个开始时间
 SafeQueue<RTMPPacket *>  packets;//缓存数据队列,等待推送的数据集合.
 
@@ -107,23 +107,19 @@ void *start(void *args){
         if(!readyPushing){
             break;
         }
-
         //如果没有流，则继续遍历
         if(!packet){
             continue;
         }
-
         //设置流类型，视频流 or 音频流
         packet->m_nInfoField2 = rtmp->m_stream_id;
-
         //send packets.
         RTMP_SendPacket(rtmp , packet , 1);
-
         //free the packet .
         releasePackets(packet);
     }
 
-    //init params .
+    //push end to rest init params .
     isStart = 0;
     readyPushing  = 0;
     //stop the queue by hand.
@@ -191,8 +187,8 @@ Java_com_poe_ppush_LivePusher_native_1start(JNIEnv *env, jobject thiz, jstring p
     char *url = new char[strlen(path)+1];
     strcpy(url,path);
 
-    //开启推流线程
-    pthread_create(pid, 0,start, url);
+    //开启推流线程 readyPushing 设置为1;
+    pthread_create(&pid, 0 ,start, url);
     //用完回收。
     env->ReleaseStringUTFChars(path_ , path);
 

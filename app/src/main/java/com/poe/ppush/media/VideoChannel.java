@@ -31,7 +31,7 @@ public class VideoChannel implements Camera.PreviewCallback, CameraHelper.OnChan
     //data   nv21 from camera directory .
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-        Log.i(TAG, "onPreviewFrame: ");
+//        Log.i(TAG, "onPreviewFrame: ");
         if (isLiving) {
             livePusher.native_pushVideo(data);
         }
@@ -40,7 +40,6 @@ public class VideoChannel implements Camera.PreviewCallback, CameraHelper.OnChan
 
     @Override
     public void onChanged(int w, int h) {
-        //
         livePusher.native_setVideoEncInfo(w, h, mFps, mBitrate);
     }
 

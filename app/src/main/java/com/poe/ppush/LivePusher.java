@@ -42,14 +42,13 @@ public class LivePusher {
         videoChannel.setPreviewDisplay(surfaceHolder);
     }
     public void switchCamera() {
-
         videoChannel.switchCamera();
     }
 
     public void startLive(String path) {
         native_start(path);
         videoChannel.startLive();
-        audioChannel.startLive();
+//        audioChannel.startLive();
     }
     public native void native_init();
     public native void native_setVideoEncInfo(int width, int height, int fps, int bitrate);

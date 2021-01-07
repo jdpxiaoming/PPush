@@ -37,11 +37,13 @@ public class MainActivity extends AppCompatActivity {
      */
     public void startLive(View view) {
 
-        mLivePusher.startLive("rtmp://172.16.22.18:1935/myapp/test");
+//        mLivePusher.startLive("rtmp://172.16.22.18:1935/myapp/test001");
+        //此处是我的服务器，你应该换成你们的直播服务器对应流地址.
+        mLivePusher.startLive("rtmp://106.75.252.245:1935/myapp/test001");
     }
 
     /**
-     * 前后摄像头切换 .
+     * 前后摄像头切换 .0
      * switch camera .
      * @param view
      */

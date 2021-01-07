@@ -19,12 +19,10 @@ void AudioChannel::encodeData(int8_t* data) {
         RTMPPacket *packet = new RTMPPacket ;
         int bodySize = 2 + bytelen;
         RTMPPacket_Alloc(packet , bodySize);
-
         //拼接音频数据
         packet->m_body[0] = 0xAF;
         //编码出的数据都是0x01
         packet->m_body[1] = 0x01;
-
         //编码之后的aac数据.
         memcpy(&packet->m_body[2] , buffer , bytelen);
         //设置编码的基础同步信息.
@@ -41,13 +39,10 @@ void AudioChannel::encodeData(int8_t* data) {
 
 //初始化音频编码器. faac编码器
 void AudioChannel::setAudioEncInfo(int sampleInHZ, int channels) {
-
     //打开编码器
     audioCodec = faacEncOpen(sampleInHZ , channels , &inputSamples , &maxOutputBytes);
-
     //设置参数.
     faacEncConfigurationPtr config = faacEncGetCurrentConfiguration(audioCodec);
-
     //采用主流的faac编码版本mpeg4.
     config->mpegVersion = MPEG4;
     //1c 标准
@@ -56,19 +51,15 @@ void AudioChannel::setAudioEncInfo(int sampleInHZ, int channels) {
     config->inputFormat = FAAC_INPUT_16BIT;
     //编码出原始数据 既不是adts 也不是adif.
     config->outputFormat = 0;
-
     //配置完毕，set 回去
     faacEncSetConfiguration(audioCodec , config);
-
     //实例化缓冲区用于底层的音频存放.
     buffer = new u_char [maxOutputBytes];
-
-
 }
 
-jint AudioChannel::getInputSamples() {
+int AudioChannel::getInputSamples() {
 
-    return NULL;
+    return inputSamples;
 }
 
 void AudioChannel::setAudioCallback(AudioChannel::AudioCallback audioCallback) {
