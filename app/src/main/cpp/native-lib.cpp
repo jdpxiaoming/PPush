@@ -24,8 +24,8 @@ void callback(RTMPPacket* packet){
         packet->m_nTimeStamp = RTMP_GetTime() - start_time;
         //加入队列.
         packets.put(packet);
+        LOGE("加入一帧数据：current packets size: %d",packets.size());
     }
-
 }
 
 /**
@@ -38,7 +38,6 @@ void releasePackets(RTMPPacket*& packet){
         delete packet;
         packet = 0;
     }
-
 }
 
 /**
@@ -95,7 +94,6 @@ void *start(void *args){
     readyPushing = 1;
     //打开工作状态.
     packets.setWork(1);
-
     RTMPPacket *packet = 0;
 
     while (readyPushing){
@@ -131,6 +129,7 @@ void *start(void *args){
     }
 
     delete url;
+    return 0;
 }
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_poe_ppush_MainActivity_stringFromJNI(
