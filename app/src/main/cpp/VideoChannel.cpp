@@ -160,6 +160,7 @@ void VideoChannel::sendSpsPps(uint8_t *sps, uint8_t *pps, int sps_length, int pp
     packet->m_body[i++] = sps[2];
     packet->m_body[i++] = sps[3];
     packet->m_body[i++] = 0xFF;
+
     //整个sps
     packet->m_body[i++] = 0xE1;
     //sps长度
@@ -176,14 +177,14 @@ void VideoChannel::sendSpsPps(uint8_t *sps, uint8_t *pps, int sps_length, int pp
 
     //设置packet类型和管道
     packet->m_packetType = RTMP_PACKET_TYPE_VIDEO;
-    packet->m_nChannel = 10;
+    packet->m_nBodySize = bodySize;
+    packet->m_nChannel = 0x10;
 
     //sps pps 没有时间戳
     packet->m_nTimeStamp = 0;
     //不适用绝对时间
     packet->m_hasAbsTimestamp = 0;
     packet->m_headerType = RTMP_PACKET_SIZE_MEDIUM;
-
     //回调给native-lib保存到队列里面.
     if(videoCallback){
         videoCallback(packet);
@@ -227,15 +228,16 @@ void VideoChannel::sendFrame(int type, uint8_t *payload, int i_payload) {
     packet->m_body[4] = 0x00;
 
     //数据长度4个字节
-    packet->m_body[5] = (i_payload >> 24)  && 0xff;
-    packet->m_body[6] = (i_payload >> 16)  && 0xff;
-    packet->m_body[7] = (i_payload >> 8)  && 0xff;
-    packet->m_body[8] = (i_payload)  && 0xff;
+    packet->m_body[5] = (i_payload >> 24) & 0xff;
+    packet->m_body[6] = (i_payload >> 16) & 0xff;
+    packet->m_body[7] = (i_payload >> 8)  & 0xff;
+    packet->m_body[8] = (i_payload)  & 0xff;
 
     //图片数据
     memcpy(&packet->m_body[9] , payload , i_payload);
 
     packet->m_hasAbsTimestamp = 0;
+    //设置关键帧的size.
     packet->m_nBodySize = bodySize;
     packet->m_packetType = RTMP_PACKET_TYPE_VIDEO;
     packet->m_nChannel = 0x10;

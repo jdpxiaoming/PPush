@@ -47,7 +47,7 @@ void releasePackets(RTMPPacket*& packet){
  */
 void *start(void *args){
     char *url = static_cast<char *>(args);
-    LOGE("开始推流 %s failed!",url);
+    LOGE("开始推流 %s !",url);
      //开启RTMP网络连接
      RTMP *rtmp = 0;
      rtmp = RTMP_Alloc();

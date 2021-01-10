@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        mLivePusher.startLive("rtmp://172.16.22.18:1935/myapp/test001");
         //此处是我的服务器，你应该换成你们的直播服务器对应流地址.
-        mLivePusher.startLive("rtmp://106.75.252.245:1935/myapp/test001");
+        mLivePusher.startLive("rtmp://106.75.252.245:1935/myapp/test002");
     }
 
     /**
