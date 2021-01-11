@@ -67,21 +67,13 @@ public class AudioChannel {
         public void run() {
 
             mAudioRecorder.startRecording();
-
-
             //去读麦克风的数据
-
             byte[] buffer = new byte[minBufferSize];
 
             while (isLiving){
-
-
-
                 int len = mAudioRecorder.read(buffer , 0 , buffer.length);
                 mLivePusher.native_pushAudio(buffer);
             }
-
-
         }
     }
 }

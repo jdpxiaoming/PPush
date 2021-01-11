@@ -14,6 +14,7 @@ class AudioChannel {
     //给音频数据一个回调方法
     typedef void (*AudioCallback)(RTMPPacket *packet);
 public:
+    RTMPPacket *getAudioTag();
     void encodeData(int8_t *data);
 
     void setAudioEncInfo(int sampleInHZ , int channels);

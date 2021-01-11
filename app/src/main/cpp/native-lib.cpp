@@ -95,7 +95,8 @@ void *start(void *args){
     //打开工作状态.
     packets.setWork(1);
     RTMPPacket *packet = 0;
-
+    //保证第一帧推送的是音频的介绍头信息.
+    callback(audioChannel->getAudioTag());
     while (readyPushing){
 
         //取出一帧数据.

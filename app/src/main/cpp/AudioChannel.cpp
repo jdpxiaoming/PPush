@@ -7,6 +7,44 @@
 #include "faac.h"
 #include "librtmp/rtmp.h"
 
+
+/**
+ * 音频开始推流前的基本信息
+ * 推给服务器.
+ * @return
+ */
+RTMPPacket *AudioChannel::getAudioTag() {
+
+    u_char * buf;
+    u_long  len;
+    //buf保存了当前解码器信息
+    faacEncGetDecoderSpecificInfo(audioCodec , &buf , &len);
+    int bodySize = 2 + len;
+    RTMPPacket *packet = new RTMPPacket ;
+    RTMPPacket_Alloc(packet , bodySize);
+    //拼接音频数据双声道0xAF.
+    packet->m_body[0] = 0xAF;
+    //单声道0xAE
+    if(mChannels == 1) {
+        packet->m_body[0] = 0xAE ;
+    }
+    //0xAF 0x00 解码信息数据
+    //0xAF 0x01 音频数据
+    packet->m_body[1] = 0x00;
+    //编码之后的aac数据.
+    memcpy(&packet->m_body[2] , buf , len);
+    //设置编码的基础同步信息.
+    packet->m_hasAbsTimestamp = 0;//相对时间
+    //数据包大小
+    packet->m_nBodySize = bodySize;
+    packet->m_packetType = RTMP_PACKET_TYPE_AUDIO ;
+    packet->m_nChannel = 0x11;//随机给防止与系统冲突即可.
+    packet->m_headerType = RTMP_PACKET_SIZE_LARGE;
+
+    return packet;
+}
+
+
 //编码一帧音频数据.
 void AudioChannel::encodeData(int8_t* data) {
     //编码一帧数据放入native的buffer里面.
@@ -16,11 +54,15 @@ void AudioChannel::encodeData(int8_t* data) {
     //0xAF 0x01 音频数据
     if(bytelen > 0){
 
-        RTMPPacket *packet = new RTMPPacket ;
         int bodySize = 2 + bytelen;
+        RTMPPacket *packet = new RTMPPacket ;
         RTMPPacket_Alloc(packet , bodySize);
-        //拼接音频数据
+        //拼接音频数据双声道0xAF.
         packet->m_body[0] = 0xAF;
+        //单声道0xAE
+        if(mChannels == 1) {
+            packet->m_body[0] = 0xAE ;
+        }
         //编码出的数据都是0x01
         packet->m_body[1] = 0x01;
         //编码之后的aac数据.
@@ -65,3 +107,5 @@ int AudioChannel::getInputSamples() {
 void AudioChannel::setAudioCallback(AudioChannel::AudioCallback audioCallback) {
     this->audioCallback = audioCallback;
 }
+
+
